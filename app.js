@@ -5,56 +5,84 @@
 
 // ── Constants ──
 const DEFAULT_PEOPLE = [
-  "Simon Rujigayija Munyaneza",
-  "Christelle Umuhire",
-  "NSENGIMANA Ntaganda",
-  "Benjamin Kanyarwanda",
-  "Cynthia Gaju",
-  "Arsene Iradukunda",
-  "Patrick Munyurangabo",
-  "Brenda Kankazi",
-  "Vanessa Ruzibiza",
-  "Abel Muriisa",
-  "Iradukunda Mugunga Sabine",
-  "Reverien Manirakiza",
-  "Rulisa Alain",
-  "Kellen Abatesi",
-  "Bikorimana Emmanuel Papy",
-  "Aimable Niyonambaje",
-  "Jean Gatera",
-  "Quinta Rwakunda",
-  "Mbaine David",
-  "Tuyisenge Theogene",
-  "Emmanuel Rukundo Bimenyimana",
-  "Jean Ndagijimana",
-  "Rose Ogwang",
-  "Dagobert Rugwiro",
-  "Muhikira Yves",
-  "Ntagungira Maurice",
-  "Pierre Celestin Yizerwe",
-  "Gustave Niyonshuti",
-  "Protais Nkundabagenzi",
-  "Jean Luc Mutabazi",
-  "Jabron Mugisha",
-  "Jean Eric Hirwa",
-  "Byishimo Yves",
-  "Jean Bosco Sibomana",
-  "Joyeuse Rukundo",
-  "Hatangimana Gilbert",
-  "Patience Uwingabire",
-  "Magaruka Alexis",
-  "Trevor Ivan Manzi",
-  "Manzi Rodrigue",
-  "Ivan Travor Manzi",
-  "Mugisha Gedeon",
-  "Iradukunda Christian",
-  "Isimbi Ingrid",
-  "Francois Xavier Turasenga",
-  "Gasana Laurent",
-  "Bonaparte Isingizwe",
-  "Tuyishime Jean Paul",
-  "Mugisha Esther",
-  "Fidele Nsabimana"
+  "ABATESI KELLEN",
+  "BIMENYIMANA RUKUNDO EMMANUEL",
+  "BIZIMANA JEAN BAPTISTE",
+  "BUCYANA JEAN DE DIEU",
+  "BUCYANA MOSES",
+  "BUGINGO FRANCOIS REGIS",
+  "BURENGERO FRANCOIS XAVIER",
+  "GAJU CYNTHIA",
+  "GASASIRA ELIPHAZ",
+  "GATABAZI JEAN BOSCO",
+  "GATERA JEAN",
+  "HABIMANA CHANTAL",
+  "HARERIMANA BONIFACE",
+  "HATANGIMANA JUVENAL",
+  "HATEGEKAYO FRANCINE",
+  "IRADUKUNDA ALPHONSE",
+  "IRADUKUNDA ARSENE",
+  "ISHIMWE MARIE THERESE",
+  "KAJANGANA JEAN DESIRE",
+  "KALIMBA JEAN CLAUDE",
+  "KAMANZI CHARLOTTE",
+  "KAMUGISHA MOSES",
+  "KANYAMAHORO KAZUNGU DEUS",
+  "MANIRAKIZA REVERIEN",
+  "MBAYINE K DAVID",
+  "MBONIGABA SILAS",
+  "MUBERARUGO RUZIBIZA VANESSA",
+  "MUHAWENIMANA YVONNE",
+  "MUHIMPUNDU SANGWA ORNELLA",
+  "MUKABISANGWA JEANNETTE",
+  "MUKAHIRWA GERMAINE",
+  "MUKAMPORERA IMMACULEE",
+  "MUKAMURENZI JACQUELINE",
+  "MUKAMURENZI MARIE CLAIRE",
+  "MUKANDUNGUTSE VESTINE",
+  "MUNYANDOHA ROBERT",
+  "MUNYANEZA SIMON",
+  "MUNYANGABE NOVO HERVE",
+  "MUREKATETE ESPERANCE",
+  "MUREKATETE JACKLINE",
+  "MUREKATETE JOSIANE",
+  "MURENZI LEONARD",
+  "MURIISA ABEL",
+  "MUSHIMIYIMANA ESTHER",
+  "NDACYAYISENGA OSWALD",
+  "NDAGIJIMANA PRUDENCE",
+  "NDAMUKUNDA DEO MAXIME",
+  "NDAYISABA AMANI",
+  "NDIKUBWIMANA CELESTIN",
+  "NIYONAMBAJE AIMABLE",
+  "NSABIMANA FIDELE",
+  "NSENGIMANA NTAGANDA",
+  "NTIRIKWENDERA JEAN BOSCO",
+  "NTIYOBERWUWAYO ERNEST",
+  "NYAMWASA THEOGENE",
+  "RUKUNDO ELIE",
+  "RULISA ALAIN",
+  "RWAKAZINA OLIVIER",
+  "RWAKUNDA QUINTA",
+  "RWEKAZA KANYONI ALEXIS",
+  "SEZIBERA C.MENDEL",
+  "SHEMA JOTHAM",
+  "TURABUMUKIZA ANNE MARIE",
+  "TUYISENGE CLAUDETTE",
+  "UMAZIMINSI EZECHIEL",
+  "UMUHOZA AURORE",
+  "UMUHOZA CHARITINE",
+  "UMUHOZA MARIE GRACE",
+  "UMURAZA COSETTE FABIOLLA",
+  "UMURERWA VIVIANNE",
+  "UMUTESI SPERATHA",
+  "UWASE MARIE ROSE",
+  "UWAYEZU CHRISTINE",
+  "UWERA MATUTINA",
+  "UWIMANA EMMANUEL",
+  "UWIMANA IMMACULEE",
+  "UWIMANA WINNY",
+  "UWIZERA DORCAS"
 ];
 
 // ── State ──
@@ -116,7 +144,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (savedPeople) { 
     try { 
       const p = JSON.parse(savedPeople); 
-      if (p.length === 50) people = p; 
+      if (p.length === DEFAULT_PEOPLE.length) people = p; 
     } catch(e){} 
   }
   if (savedVotes)  { 
@@ -144,17 +172,26 @@ function proceedToVote() {
     return;
   }
 
+  // Validate name is on the official list
+  const matchedPerson = people.find(p => normalizeName(p) === normalizeName(raw));
+  if (!matchedPerson) {
+    err.innerHTML = '⚠ Invalid name. Please enter your name <strong>exactly</strong> as it appears on the participant list.';
+    err.style.display = 'block';
+    document.getElementById('nameInput').focus();
+    return;
+  }
+
   // Duplicate voter check
   const alreadyVoted = votes.find(v => normalizeName(v.voterName) === normalizeName(raw));
   if (alreadyVoted) {
-    err.textContent = `⚠ This person has already participated! Each person can only pick once.`;
+    err.textContent = `⚠ You have already participated! Each person can only pick once.`;
     err.style.display = 'block';
     document.getElementById('nameInput').focus();
     return;
   }
 
   err.style.display = 'none';
-  currentVoterName = raw;
+  currentVoterName = matchedPerson; // use the canonical casing from the list
   selectedNumber = null;
 
   document.getElementById('voteHeader').innerHTML = `
@@ -166,7 +203,7 @@ function proceedToVote() {
 
   const selfIndex = people.findIndex(p => normalizeName(p) === normalizeName(currentVoterName));
 
-  document.getElementById('numberGrid').innerHTML = Array.from({ length: 50 }, (_, i) => {
+  document.getElementById('numberGrid').innerHTML = Array.from({ length: people.length }, (_, i) => {
     const taken = takenNumbers.has(i);
     const isSelf = i === selfIndex;
     return `
@@ -264,7 +301,7 @@ function showSummary() {
       <div class="stat-label">Numbers Taken</div>
     </div>
     <div class="stat">
-      <div class="stat-num" style="color:var(--green2)">${50 - taken}</div>
+      <div class="stat-num" style="color:var(--green2)">${people.length - taken}</div>
       <div class="stat-label">Numbers Free</div>
     </div>
   `;
