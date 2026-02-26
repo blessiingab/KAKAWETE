@@ -72,6 +72,9 @@
   <!-- SCREEN 3 -->
   <section id="screen-result" class="screen">
     <div class="card result" id="resultCard"></div>
+    <div class="center">
+      <button class="btn ghost small" onclick="showScreen('screen-name')">← New Participant</button>
+    </div>
   </section>
 
   <!-- SCREEN 4 -->
@@ -103,13 +106,12 @@
     </div>
   </section>
 
-</main>
   <!-- ADMIN LOGIN SCREEN -->
   <section id="screen-admin-login" class="screen">
-    <div class="card" style="max-width:420px;margin:auto;">
+    <div class="card card-admin-login">
       <div class="admin-lock-icon">🔐</div>
       <h2>ADMIN ACCESS</h2>
-      <p class="muted" style="margin-bottom:24px;">Enter the admin password to view the full summary</p>
+      <p class="muted admin-login-subtitle">Enter the admin password to view the full summary</p>
       <input
         type="password"
         id="adminPasswordInput"
@@ -119,7 +121,7 @@
       >
       <div class="name-error" id="adminError"></div>
       <button class="btn primary full" onclick="adminLogin()">Unlock Panel 🔓</button>
-      <button class="btn ghost full" style="margin-top:10px;" onclick="showScreen('screen-name')">← Back</button>
+      <button class="btn ghost full btn-back-admin" onclick="showScreen('screen-name')">← Back</button>
     </div>
   </section>
 
@@ -127,11 +129,11 @@
   <section id="screen-admin" class="screen">
     <div class="card wide">
       <div class="summary-header">
-        <div style="display:flex;align-items:center;gap:12px;">
+        <div class="admin-header-left">
           <div class="admin-badge">🛡 ADMIN</div>
           <h2>Secret Santa Summary</h2>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+        <div class="admin-header-actions">
           <button class="btn ghost small" onclick="exportCSV()">⬇ Export CSV</button>
           <button class="btn-danger small" onclick="confirmReset()">🗑 Reset All</button>
           <button class="btn ghost small" onclick="showScreen('screen-name')">← Back</button>
@@ -149,6 +151,11 @@
           <div class="progress-fill" id="progressFill"></div>
         </div>
       </div>
+
+      <div class="admin-search-wrap">
+        <input type="text" id="adminSearch" placeholder="🔍 Search by name or number..." oninput="renderAdminTable()" class="admin-search">
+      </div>
+
       <div class="table-wrap">
         <table class="summary-table">
           <thead>
@@ -172,6 +179,7 @@
     </div>
   </section>
 
+</main>
 <script src="app.js"></script>
 </body>
 </html>
