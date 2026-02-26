@@ -1,13 +1,19 @@
 :root {
-  --bg:#070c18;
+  --bg:#001f4d;
+  --bg2:#002966;
   --card:rgba(255,255,255,0.06);
-  --border:rgba(255,255,255,0.12);
-  --red:#dc2626;
-  --green:#16a34a;
-  --gold:#fbbf24;
-  --muted:#94a3b8;
-  --red2:#ff4d4d;
-  --green2:#22c55e;
+  --border:rgba(255,255,255,0.14);
+  --primary:#cf2e2e;
+  --primary-dark:#9b1a1a;
+  --primary-glow:rgba(207,46,46,0.4);
+  --secondary:#ff6900;
+  --navy:#001f4d;
+  --navy-light:#003080;
+  --gold:#ff6900;
+  --muted:#abb8c3;
+  --red2:#cf2e2e;
+  --green2:#00d084;
+  --green:#00d084;
 }
 
 *{
@@ -18,7 +24,7 @@
 
 body{
   font-family:'Syne',sans-serif;
-  background:radial-gradient(circle at top left,#111827,var(--bg) 60%);
+  background:radial-gradient(circle at top left,#003080,var(--bg) 60%);
   color:white;
   min-height:100vh;
   overflow-x:hidden;
@@ -61,8 +67,8 @@ body{
   opacity:.25;
 }
 
-.glow-red{ background:var(--red); top:-100px; left:-100px; }
-.glow-green{ background:var(--green); bottom:-100px; right:-100px; }
+.glow-red{ background:var(--primary); top:-100px; left:-100px; }
+.glow-green{ background:#003080; bottom:-100px; right:-100px; }
 
 /* Layout */
 .app{
@@ -93,7 +99,7 @@ body{
   position:absolute;
   width:250px;
   height:250px;
-  background:radial-gradient(circle,rgba(251,191,36,.35),transparent);
+  background:radial-gradient(circle,rgba(255,105,0,.25),transparent);
   filter:blur(80px);
   top:-120px;
   right:-120px;
@@ -118,8 +124,8 @@ body{
 }
 
 #nameInput:focus{
-  border-color:var(--gold);
-  box-shadow:0 0 0 4px rgba(251,191,36,.25);
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px rgba(207,46,46,.25);
   transform:scale(1.03);
   outline:none;
 }
@@ -142,9 +148,9 @@ body{
 }
 
 .btn.primary{
-  background:linear-gradient(135deg,var(--red),#991b1b);
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
   color:white;
-  box-shadow:0 15px 40px rgba(220,38,38,.5);
+  box-shadow:0 15px 40px var(--primary-glow);
 }
 
 .btn.primary:hover{
@@ -194,8 +200,8 @@ body{
 }
 
 .num-card.selected{
-  background:linear-gradient(135deg,var(--green),#065f46);
-  box-shadow:0 0 35px rgba(34,197,94,.5);
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  box-shadow:0 0 35px var(--primary-glow);
 }
 
 .num-card.taken{
@@ -207,8 +213,8 @@ body{
 .result-number-big{
   font-size:70px;
   font-weight:900;
-  color:var(--gold);
-  text-shadow:0 0 30px rgba(251,191,36,.8);
+  color:var(--secondary);
+  text-shadow:0 0 30px rgba(255,105,0,.8);
   margin:20px 0;
 }
 
@@ -216,7 +222,7 @@ body{
   font-size:38px;
   font-weight:900;
   color:var(--green2);
-  text-shadow:0 0 25px rgba(34,197,94,.6);
+  text-shadow:0 0 25px rgba(0,208,132,.6);
   position:relative;
   display:inline-block;
   margin-top:15px;
@@ -277,8 +283,8 @@ body{
 .num-card.self-blocked{
   opacity:.35;
   cursor:not-allowed;
-  border-color:rgba(251,191,36,0.4);
-  background:rgba(251,191,36,0.06);
+  border-color:rgba(207,46,46,0.4);
+  background:rgba(207,46,46,0.06);
 }
 
 .num-card.self-blocked .num-tag{
@@ -342,7 +348,7 @@ body{
 .admin-lock-icon {
   font-size: 48px;
   margin-bottom: 16px;
-  filter: drop-shadow(0 0 20px rgba(251,191,36,.5));
+  filter: drop-shadow(0 0 20px rgba(255,105,0,.5));
 }
 
 #adminPasswordInput {
@@ -359,15 +365,15 @@ body{
   letter-spacing: 4px;
 }
 #adminPasswordInput:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 4px rgba(251,191,36,.25);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(207,46,46,.25);
   outline: none;
 }
 
 .admin-badge {
-  background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,191,36,0.08));
-  border: 1px solid rgba(251,191,36,0.4);
-  color: var(--gold);
+  background: linear-gradient(135deg, rgba(207,46,46,0.2), rgba(207,46,46,0.08));
+  border: 1px solid rgba(207,46,46,0.4);
+  color: var(--primary);
   padding: 5px 14px;
   border-radius: 20px;
   font-size: 12px;
@@ -413,10 +419,10 @@ body{
 }
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--green), var(--green2));
+  background: linear-gradient(90deg, var(--secondary), var(--primary));
   border-radius: 99px;
   transition: width 1s cubic-bezier(.4,0,.2,1);
-  box-shadow: 0 0 12px rgba(34,197,94,.5);
+  box-shadow: 0 0 12px var(--primary-glow);
   width: 0%;
 }
 
@@ -435,9 +441,9 @@ body{
   transition: .3s;
 }
 .admin-search:focus {
-  border-color: var(--gold);
+  border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(251,191,36,0.2);
+  box-shadow: 0 0 0 3px rgba(207,46,46,0.2);
 }
 .admin-search::placeholder { color: var(--muted); }
 
@@ -480,9 +486,9 @@ body{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,191,36,0.08));
-  border: 1px solid rgba(251,191,36,0.35);
-  color: var(--gold);
+  background: linear-gradient(135deg, rgba(207,46,46,0.2), rgba(207,46,46,0.08));
+  border: 1px solid rgba(207,46,46,0.35);
+  color: var(--primary);
   border-radius: 10px;
   width: 38px;
   height: 28px;

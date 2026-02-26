@@ -154,6 +154,20 @@ window.addEventListener('DOMContentLoaded', () => {
     try { takenNumbers = new Set(JSON.parse(savedTaken)); } catch(e){ takenNumbers = new Set(); } 
   }
 
+  // Clear stale data if saved list length doesn't match current list
+  if (savedPeople) {
+    try {
+      const p = JSON.parse(savedPeople);
+      if (p.length !== DEFAULT_PEOPLE.length) {
+        votes = [];
+        takenNumbers = new Set();
+        localStorage.removeItem('ss_votes_v1');
+        localStorage.removeItem('ss_taken_v1');
+        localStorage.removeItem('ss_people_v1');
+      }
+    } catch(e) {}
+  }
+
   showScreen('screen-name');
   setTimeout(() => document.getElementById('nameInput').focus(), 300);
 });
@@ -332,10 +346,10 @@ function deleteVote(index) {
 // ════════════════════════════════════════
 // ADMIN PANEL
 // ════════════════════════════════════════
-const ADMIN_PASSWORD = "kakawete2026";
+const ADMIN_PASSWORD = "Sonarwa@25";
 
 function adminLogin() {
-  const pw = document.getElementById('adminPasswordInput').value;
+  const pw = document.getElementById('adminPasswordInput').value.trim();
   const err = document.getElementById('adminError');
   if (pw !== ADMIN_PASSWORD) {
     err.textContent = '⚠ Incorrect password. Try again.';
