@@ -220,20 +220,14 @@ function proceedToVote() {
 
   const selfIndex = people.findIndex(p => normalizeName(p) === normalizeName(currentVoterName));
 
-  // Build a lookup: numberIndex → voterName
-  const takenBy = {};
-  votes.forEach(v => { takenBy[v.numberIndex] = v.voterName; });
-
   document.getElementById('numberGrid').innerHTML = Array.from({ length: people.length }, (_, i) => {
     const taken = takenNumbers.has(i);
     const isSelf = i === selfIndex;
-    const taker = takenBy[i] || '';
-    // Show only first name for space
-    const firstName = taker ? taker.split(' ')[0] : '';
     return `
       <div class="num-card ${taken ? 'taken' : ''} ${isSelf ? 'self-blocked' : ''}" id="ncard-${i}" onclick="pickNumber(${i})">
+        <div class="taken-dot"></div>
         <div class="num-big">${i + 1}</div>
-        <div class="num-tag">${taken ? firstName : isSelf ? '🚫 YOU' : 'FREE'}</div>
+        <div class="num-tag">${taken ? 'TAKEN' : isSelf ? '🚫 YOU' : 'FREE'}</div>
       </div>`;
   }).join('');
 
