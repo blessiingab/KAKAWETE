@@ -106,6 +106,9 @@ function showScreen(id) {
   const screen = document.getElementById(id);
   if (screen) screen.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Show floating Reveal button only on vote screen
+  const floatBtn = document.getElementById('revealFloatBtn');
+  if (floatBtn) floatBtn.style.display = (id === 'screen-vote') ? 'inline-flex' : 'none';
 }
 
 // ── Persist state ──
@@ -229,6 +232,8 @@ function proceedToVote() {
   }).join('');
 
   document.getElementById('confirmBtn').disabled = true;
+  const fb2 = document.getElementById('revealFloatBtn');
+  if (fb2) { fb2.disabled = true; fb2.classList.add('float-disabled'); }
   showScreen('screen-vote');
 }
 
@@ -261,6 +266,8 @@ function pickNumber(i) {
   card.classList.add('selected');
   card.querySelector('.num-tag').textContent = '✓ CHOSEN';
   document.getElementById('confirmBtn').disabled = false;
+  const fb = document.getElementById('revealFloatBtn');
+  if (fb) { fb.disabled = false; fb.classList.remove('float-disabled'); }
 }
 
 // ════════════════════════════════════════
@@ -391,7 +398,7 @@ function showAdminPanel() {
   document.getElementById('progressPct').textContent = pct + '%';
   document.getElementById('progressFill').style.width = pct + '%';
 
-  document.getElementById('adminSearch').value = '';
+
   renderAdminTable();
 
   const assignedNames = new Set(votes.map(v => normalizeName(v.voterName)));
@@ -405,29 +412,18 @@ function showAdminPanel() {
 }
 
 function renderAdminTable() {
-  const query = (document.getElementById('adminSearch')?.value || '').toLowerCase();
-  const filtered = votes.filter(v =>
-    !query ||
-    v.voterName.toLowerCase().includes(query) ||
-    (people[v.numberIndex] || '').toLowerCase().includes(query) ||
-    String(v.numberIndex + 1).includes(query)
-  );
-
-  document.getElementById('adminSummaryBody').innerHTML = filtered.length === 0
-    ? `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px;font-family:'DM Mono',monospace;font-size:12px;">
-        ${votes.length === 0 ? '🎅 No assignments yet — Ho Ho Ho!' : '🔍 No results match your search.'}
+  document.getElementById('adminSummaryBody').innerHTML = votes.length === 0
+    ? `<tr><td colspan="5" style="text-align:center;color:var(--ink-muted);padding:28px;font-family:'DM Mono',monospace;font-size:12px;">
+        🎅 No assignments yet — Ho Ho Ho!
        </td></tr>`
-    : filtered.map(v => {
-        const globalIndex = votes.indexOf(v);
-        return `
-          <tr>
-            <td style="color:var(--muted);font-family:'DM Mono',monospace;font-size:11px">${globalIndex + 1}</td>
-            <td><strong>${v.voterName}</strong></td>
-            <td><div class="num-badge">${v.numberIndex + 1}</div></td>
-            <td><strong style="color:var(--green2)">${people[v.numberIndex]}</strong></td>
-            <td><button class="btn-delete" onclick="adminDeleteVote(${globalIndex})" title="Remove entry">✕</button></td>
-          </tr>`;
-      }).join('');
+    : votes.map((v, i) => `
+        <tr>
+          <td style="color:var(--ink-muted);font-family:'DM Mono',monospace;font-size:11px">${i + 1}</td>
+          <td><strong>${v.voterName}</strong></td>
+          <td><div class="num-badge">${v.numberIndex + 1}</div></td>
+          <td><strong>${people[v.numberIndex]}</strong></td>
+          <td><button class="btn-delete" onclick="adminDeleteVote(${i})" title="Remove entry">✕</button></td>
+        </tr>`).join('');
 }
 
 function adminDeleteVote(index) {
