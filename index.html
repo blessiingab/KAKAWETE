@@ -3,194 +3,241 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KAKAWETE • Secret Santa 2026</title>
-<link rel="stylesheet" href="style.css">
+<title>KAKAWETE · Secret Santa 2026 · SONARWA</title>
+<link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<!-- Background -->
-<div class="bg-layer">
-  <div class="glow glow-red"></div>
-  <div class="glow glow-green"></div>
-  <div class="snowflakes" id="snowflakes"></div>
-</div>
+<div class="shell">
 
-<main class="app">
-
-  <!-- HERO -->
-  <header class="hero">
-
-    <!-- Brand identity bar -->
-    <div class="brand-bar">
-      <img src="sonarwa-logo.jpg" alt="SONARWA General" class="brand-logo">
-      <div class="brand-text">
-        <div class="brand-name">SONARWA General Insurance Co.Ltd</div>
+  <!-- ═════ TOPBAR ═════ -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">
+        <img src="sonarwa-logo.jpg" alt="SONARWA">
       </div>
-      <div class="brand-divider"></div>
-      <div class="brand-event">
-        <div class="brand-event-label">Annual Event</div>
-        <div class="brand-event-name">Secret Santa 2026</div>
+      <div>
+        <div class="topbar-name">SONARWA General Insurance</div>
+        <div class="topbar-sub">Co. Ltd · Kigali, Rwanda</div>
       </div>
     </div>
 
-    <div class="hero-badge">✦ SECRET SANTA 2026 ✦</div>
-    <h1 class="logo"><span class="k1">KAKAWETE</span></h1>
-    <p class="hero-tagline">Gift Exchange · SONARWA Family</p>
-    <button class="btn-admin-access" onclick="showScreen('screen-admin-login')">🛡 Admin</button>
+    <div class="topbar-right">
+      <div class="topbar-event">
+        <div class="topbar-event-label">Annual Event</div>
+        <div class="topbar-event-name">Secret Santa 2026</div>
+      </div>
+      <button class="btn-admin" onclick="showScreen('screen-admin-login')">⬡ Admin</button>
+    </div>
   </header>
 
-  <!-- FLOATING REVEAL BUTTON (visible only on screen-vote) -->
-  <button class="btn-reveal-float" id="revealFloatBtn" onclick="confirmVote()" title="Reveal My Gift">
-    🎁 <span class="float-label">Reveal Gift</span>
+  <div class="red-stripe"></div>
+
+  <!-- ═════ HERO ═════ -->
+  <section class="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-inner">
+      <div class="hero-tag">✦ Secret Santa 2026 ✦</div>
+      <h1 class="hero-title"><em>KAKAWETE</em></h1>
+      <p class="hero-desc">Gift Exchange · SONARWA Family</p>
+      <div class="hero-ornament">
+        <span></span>
+        <div class="hero-ornament-mid">
+          <span>❄</span><span>✦</span><span>🎁</span><span>✦</span><span>❄</span>
+        </div>
+        <span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════ FLOATING REVEAL BUTTON ═════ -->
+  <button class="float-btn" id="floatReveal" onclick="confirmVote()"  disabled>
+    🎁 Reveal My Recipient
   </button>
 
-  <!-- SCREEN 1 -->
-  <section id="screen-name" class="screen active">
-    <div class="card">
-      <h2>WELCOME</h2>
-      <p class="muted">Enter your full name to begin</p>
+  <!-- ═════ MAIN ═════ -->
+  <main class="main">
 
-      <input
-        type="text"
-        id="nameInput"
-        placeholder="Your full name..."
-        autocomplete="off"
-        onkeydown="if(event.key==='Enter') proceedToVote()"
-      >
+    <!-- ── Screen 1: Enter Name ── -->
+    <section id="screen-name" class="screen active">
+      <div class="card card-narrow">
+        <div class="card-icon">🎁</div>
+        <h2 class="card-title">Welcome</h2>
 
-      <div class="name-error" id="nameError"></div>
+        <div class="field">
+          <label class="field-label" for="nameInput">Your Full Name</label>
+          <input
+            type="text"
+            id="nameInput"
+            class="field-input"
+            autocomplete="off"
+            autocapitalize="characters"
+            onkeydown="if(event.key==='Enter') proceedToVote()"
+            oninput="onNameInput(this.value)"
+          >
+          <div class="field-error" id="nameError"></div>
+          <div class="suggestions" id="nameSuggestions"></div>
+        </div>
 
-      <button class="btn primary full" onclick="proceedToVote()">
-        Continue
-      </button>
-    </div>
-  </section>
-
-  <!-- SCREEN 2 -->
-  <section id="screen-vote" class="screen">
-    <div class="card wide">
-
-      <div id="voteHeader" class="vote-header"></div>
-
-      <h3 class="grid-title">🎁 Select Your Gift Number</h3>
-
-      <div id="numberGrid" class="number-grid"></div>
-
-      <div class="btn-row">
-        <button class="btn primary" id="confirmBtn" onclick="confirmVote()" disabled>
-          Reveal 🎁
+        <button class="btn-primary" onclick="proceedToVote()">
+          <span>Continue to Gift Selection</span>
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
-        <button class="btn ghost" onclick="goBack()">Back</button>
       </div>
+    </section>
 
-    </div>
-  </section>
+    <!-- ── Screen 2: Pick a Number ── -->
+    <section id="screen-vote" class="screen">
+      <div class="card card-wide">
+        <div class="voter-banner" id="voterBanner"></div>
 
-  <!-- SCREEN 3 -->
-  <section id="screen-result" class="screen">
-    <div class="card result" id="resultCard"></div>
-  </section>
-
-  <!-- SCREEN 4 -->
-  <section id="screen-summary" class="screen">
-    <div class="card wide">
-
-      <div class="summary-header">
-        <h2> Secret Santa Summary</h2>
-        <button class="btn ghost small" onclick="showScreen('screen-name')">Back</button>
-      </div>
-
-      <div id="statsBar" class="stats-bar"></div>
-
-      <div class="table-wrap">
-        <table class="summary-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Santa</th>
-              <th>Number</th>
-              <th>Recipient</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="summaryBody"></tbody>
-        </table>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ADMIN LOGIN SCREEN -->
-  <section id="screen-admin-login" class="screen">
-    <div class="card card-admin-login">
-      <div class="admin-lock-icon">🔐</div>
-      <h2>ADMIN ACCESS</h2>
-      <p class="muted admin-login-subtitle">Enter the admin password to view the full summary</p>
-      <input
-        type="password"
-        id="adminPasswordInput"
-        placeholder="Password..."
-        autocomplete="off"
-        onkeydown="if(event.key==='Enter') adminLogin()"
-      >
-      <div class="name-error" id="adminError"></div>
-      <button class="btn primary full" onclick="adminLogin()">Unlock Panel 🔓</button>
-      <button class="btn ghost full btn-back-admin" onclick="showScreen('screen-name')">← Back</button>
-    </div>
-  </section>
-
-  <!-- ADMIN PANEL SCREEN -->
-  <section id="screen-admin" class="screen">
-    <div class="card wide">
-      <div class="summary-header">
-        <div class="admin-header-left">
-          <div class="admin-badge">🛡 ADMIN</div>
-          <h2>Secret Santa Summary</h2>
+        <div class="grid-toolbar">
+          <h3>Select Your Gift Number</h3>
+          <div class="legend">
+            <span class="legend-item"><span class="legend-dot dot-free"></span>Available</span>
+            <span class="legend-item"><span class="legend-dot dot-taken"></span>Taken</span>
+            <span class="legend-item"><span class="legend-dot dot-you"></span>You</span>
+          </div>
         </div>
-        <div class="admin-header-actions">
-          <button class="btn ghost small" onclick="exportCSV()">⬇ Export CSV</button>
-          <button class="btn-danger small" onclick="confirmReset()">🗑 Reset All</button>
-          <button class="btn ghost small" onclick="showScreen('screen-name')">← Back</button>
+
+        <div id="numGrid" class="num-grid"></div>
+
+        <div class="grid-actions">
+          <button class="btn-primary" id="confirmBtn" onclick="confirmVote()" disabled>
+            <span>Reveal My Recipient</span>
+            <span>🎁</span>
+          </button>
+          <button class="btn-outline" onclick="goBack()">← Back</button>
         </div>
       </div>
+    </section>
 
-      <div id="adminStatsBar" class="stats-bar"></div>
+    <!-- ── Screen 3: Result ── -->
+    <section id="screen-result" class="screen">
+      <div class="card card-narrow">
+        <div class="result-wrap" id="resultWrap"></div>
+        <button class="btn-outline" style="margin-top:8px;width:100%;justify-content:center" onclick="goBack()">← Done</button>
+      </div>
+    </section>
 
-      <div class="progress-wrap">
-        <div class="progress-label">
-          <span>Participation Progress</span>
-          <span id="progressPct">0%</span>
+    <!-- ── Screen 4: Summary (Public) ── -->
+    <section id="screen-summary" class="screen">
+      <div class="card card-wide">
+        <div class="section-head">
+          <div>
+            <h2 class="card-title">Assignments</h2>
+            <p style="font-size:13px;color:var(--ink-4)">Secret Santa overview</p>
+          </div>
+          <button class="btn-outline" onclick="showScreen('screen-name')">← Back</button>
         </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="progressFill"></div>
+        <div id="summaryStats" class="stats-row"></div>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:36px">#</th>
+                <th>Santa</th>
+                <th style="text-align:center">Gift #</th>
+                <th>Recipient</th>
+              </tr>
+            </thead>
+            <tbody id="summaryBody"></tbody>
+          </table>
         </div>
       </div>
+    </section>
 
-      <div class="table-wrap">
-        <table class="summary-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Santa 🎅</th>
-              <th>Gift #</th>
-              <th>Recipient 🎁</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="adminSummaryBody"></tbody>
-        </table>
+    <!-- ── Screen 5: Admin Login ── -->
+    <section id="screen-admin-login" class="screen">
+      <div class="card card-narrow">
+        <span class="lock-icon">⬡</span>
+        <h2 class="card-title">Admin Access</h2>
+        <p class="card-sub">Restricted. Enter the admin password to unlock the control panel.</p>
+
+        <div class="field">
+          <label class="field-label" for="adminPw">Password</label>
+          <input
+            type="password"
+            id="adminPw"
+            class="field-input"
+            placeholder="Enter password…"
+            onkeydown="if(event.key==='Enter') adminLogin()"
+          >
+          <div class="field-error" id="adminError"></div>
+        </div>
+
+        <button class="btn-primary" onclick="adminLogin()">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 11V7a4 4 0 1 1 8 0m-4 3v6m-6 0h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2Z"/></svg>
+          <span>Unlock Panel</span>
+        </button>
+        <button class="btn-outline" style="width:100%;justify-content:center;margin-top:10px" onclick="showScreen('screen-name')">Cancel</button>
       </div>
+    </section>
 
-      <div class="unassigned-section">
-        <h3 class="section-title">⏳ Pending Participation — <span id="unassignedCount">0</span> people</h3>
-        <div id="unassignedList" class="unassigned-grid"></div>
+    <!-- ── Screen 6: Admin Panel ── -->
+    <section id="screen-admin" class="screen">
+      <div class="card card-wide">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <span class="badge-admin">⬡ Admin</span>
+            <h2 style="font-family:var(--ff-display);font-size:26px;color:var(--ink)">Control Panel</h2>
+          </div>
+          <div class="panel-header-right">
+            <button class="btn-outline" onclick="exportCSV()">↓ Export CSV</button>
+            <button class="btn-danger-outline" onclick="confirmReset()">✕ Reset All</button>
+            <button class="btn-outline" onclick="showScreen('screen-name')">← Exit</button>
+          </div>
+        </div>
+
+        <div id="adminStats" class="stats-row"></div>
+
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span>Participation Progress</span>
+            <span class="progress-pct" id="progressPct">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="admin-search">
+          <input type="text" class="field-input" placeholder="🔍 Search by Santa or Recipient…" oninput="filterAdmin(this.value)">
+        </div>
+
+        <div class="table-scroll">
+          <table class="data-table" id="adminTable">
+            <thead>
+              <tr>
+                <th style="width:36px">#</th>
+                <th>Santa 🎅</th>
+                <th style="text-align:center">Gift #</th>
+                <th>Recipient 🎁</th>
+                <th>Time</th>
+                <th style="width:36px"></th>
+              </tr>
+            </thead>
+            <tbody id="adminBody"></tbody>
+          </table>
+        </div>
+
+        <div class="section-title">
+          ⏳ Pending — <span id="pendingCount">0</span> remaining
+        </div>
+        <div id="pendingChips" class="chip-cloud"></div>
       </div>
+    </section>
 
-    </div>
-  </section>
+  </main>
 
-</main>
-<script src="app.js"></script>
+  <!-- ═════ FOOTER ═════ -->
+  <footer class="footer">
+    <p>KAKAWETE Secret Santa 2026<span>·</span>SONARWA General Insurance Co. Ltd<span>·</span>Kigali, Rwanda 🇷🇼</p>
+  </footer>
+
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
